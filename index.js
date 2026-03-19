@@ -1,18 +1,22 @@
+
 import express from "express";
 import mongoose from "mongoose";
 import userRouter from "./routers/userRouter.js";
 import authenticateUser from "./middlewares/authentication.js";
 import productRouter from "./routers/productRouter.js";
+import cors from "cors";
+import dotenv from "dotenv";
 
+
+dotenv.config();
 
 const app = express();
 
-// cluster URI
-const mongodbURI = "mongodb+srv://admin:1234@cluster0.s6mhjd7.mongodb.net/icomputers?appName=Cluster0";
-
+const mongodbURI = process.env.MONGO_URI; // access mongodb uri from .env file
 
 // connect mongoose
-mongoose.connect(mongodbURI).then(
+mongoose.connect(mongodbURI)
+.then(
     ()=> {
         console.log("Mongoose Connected...");
     }
@@ -21,6 +25,8 @@ mongoose.connect(mongodbURI).then(
         console.error(err);
     }
 );
+ 
+app.use( cors() );
 
 // collections = database, documents = records
 // middleware plugging using use()
@@ -31,8 +37,8 @@ app.use(authenticateUser);
 
 
 // pluging router
-app.use("/user", userRouter);
-app.use("/product", productRouter);
+app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
 
 
 
