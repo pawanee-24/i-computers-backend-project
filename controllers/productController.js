@@ -5,7 +5,7 @@ export async function createProduct(req, res){
 
     if(!isAdmin(req)){
         res.status(403).json({
-            massage : "access denied. admin only"
+            message : "access denied. admin only"
         });
         return
     }
@@ -19,7 +19,7 @@ export async function createProduct(req, res){
 
         if(existingProduct != null){
             res.status(400).json({
-                massage : "product with this productId already exists"
+                message : "product with this productId already exists"
             });
             return
         }
@@ -42,12 +42,15 @@ export async function createProduct(req, res){
         await newProduct.save();
 
         res.status(201).json({
-            massage : "product create success"
+            message : "product create success"
         });
 
     } catch (error) {
+        console.error("FULL ERROR:", error);
+
         res.status(500).json({
-            massage : "error creating product"
+            message : error.message,
+            error: error
         });
     }
 }
@@ -67,7 +70,7 @@ export async function getAllProducts(req, res){
         
     } catch (error) {
         res.status(500).json({
-            massage : "error fatching product"
+            message : "error fatching product"
         });
     }
 }
@@ -77,7 +80,7 @@ export async function deleteProduct(req, res){
 
      if(!isAdmin(req)){
         res.status(403).json({
-            massage : "access denied. admin only"
+            message : "access denied. admin only"
         });
         return
     }
@@ -85,15 +88,15 @@ export async function deleteProduct(req, res){
     try {
         
         await Product.deleteOne({
-            productId : req.params.ProductId
+            productId : req.params.productId
         })
         res.json({
-            massage : "delete product"
+            message : "delete product"
         });
 
     } catch (error) {
         res.status(500).json({
-            massage : "error delete product"
+            message : "error delete product"
         });
     }
 }
@@ -103,7 +106,7 @@ export async function updateProduct(req, res){
 
     if(!isAdmin(req)){
         res.status(403).json({
-            massage : "access denied. admin only"
+            message : "access denied. admin only"
         });
         return
     }
@@ -127,12 +130,12 @@ export async function updateProduct(req, res){
         });
 
         res.json({
-            massage : "product updated success"
+            message : "product updated success"
         });
         
     } catch (error) {
         res.status(500).json({
-            massage : "error updating product"
+            message : "error updating product"
         });
     }
 }
@@ -146,7 +149,7 @@ export async function getProductById(req, res){
 
         if(product == null){
             res.status(404).json({
-                massage : "paroduct not found"
+                message : "product not found"
             });
         } else {
             if (product.isAvailable) {
@@ -156,7 +159,7 @@ export async function getProductById(req, res){
                     res.json(product);
                 } else {
                     res.status(403).json({
-                        massage : "access denied. Admin only"
+                        message : "access denied. Admin only"
                     });
                 }
             }
@@ -164,7 +167,7 @@ export async function getProductById(req, res){
 
     } catch (error) {
          res.status(500).json({
-            massage : "error fetching product"
+            message : "error fetching product"
         });
     }
 }

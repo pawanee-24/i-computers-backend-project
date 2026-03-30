@@ -21,12 +21,12 @@ export async function createUser(req, res){
         await newUser.save();
 
         res.json({
-            massage : "user create successfully"
+            message : "user create successfully"
         });
 
     } catch (error) {
         res.json({
-            massage : "error creating user"
+            message : "error creating user"
         });
     }
     
@@ -46,7 +46,7 @@ export async function loginUser(req, res){
 
         if(user == null){
             res.status(404).json({
-                massage : "user not found"
+                message : "user not found"
             });
 
         } else {
@@ -79,14 +79,14 @@ export async function loginUser(req, res){
 
             } else {
                 res.status(401).json({
-                    massage : "invalid password"
+                    message : "invalid password"
                 });
             }
         }
 
     } catch (error) {
         res.status(500).json({
-            massage : "invalid loging in"
+            message : "invalid loging in"
         });
     }
 
